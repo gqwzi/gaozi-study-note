@@ -38,4 +38,19 @@ MySQL索引的建立对于MySQL的高效运行是很重要的，索引可以大�
 4.全文索引fulltext :用于搜索很长一篇文章的时候，效果最好。  
 5.空间索引spatial :了解就好，几乎不用
 
-        
+##### 【索引的两大类型】
+ hash与btree  
+ hash类型的索引：查询单条快，范围查询慢
+ btree类型的索引：b+树，层数越多，数据量指数级增长（我们就用它，因为innodb默认支持它）
+   
+ 不同的存储引擎支持的索引类型也不一样    
+ InnoDB 支持事务，支持行级别锁定，支持 B-tree、Full-text 等索引，不支持 Hash 索引；
+ MyISAM 不支持事务，支持表级别锁定，支持 B-tree、Full-text 等索引，不支持 Hash 索引；
+ Memory 不支持事务，支持表级别锁定，支持 B-tree、Hash 等索引，不支持 Full-text 索引；
+ NDB 支持事务，支持行级别锁定，支持 Hash 索引，不支持 B-tree、Full-text 等索引；
+ Archive 不支持事务，支持表级别锁定，不支持 B-tree、Hash、Full-text 等索引；       
+ 
+ 
+ ##### 【原理】
+ 
+ ##### 【explain分析】
