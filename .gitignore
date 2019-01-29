@@ -149,9 +149,7 @@ local.properties
 # .idea/dynamic.xml
 # .idea/uiDesigner.xml
 
-# Gradle:
-# .idea/gradle.xml
-# .idea/libraries
+ Gradle:
 
 # Mongo Explorer plugin:
 # .idea/mongoSettings.xml
@@ -204,3 +202,5 @@ buildNumber.properties
 ehcache/
 logs/
 application-multiEnv.properties
+/.gradle/
+/.idea/
