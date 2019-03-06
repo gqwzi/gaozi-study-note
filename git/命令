@@ -1,0 +1,15 @@
+【git配置的用户名和邮箱】
+【01 - 查看】
+git config user.name
+git config user.email
+
+【02 - 修改】
+git config user.name aaa
+git config user.email bbb
+
+【03 - 全局修改】
+git config --global user.name aaa
+git config --global user.email bbb
+
+【备注】解决contributions不显示小绿块的问题
+（幸幸苦苦提交的代码没有贡献度,让我等非大佬的人连这点成就感都没法表现,气晕了要哈哈）
