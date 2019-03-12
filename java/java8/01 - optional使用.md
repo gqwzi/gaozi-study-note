@@ -159,7 +159,7 @@ if (user != null) {
 User user = ...
 Optional<User> userOpt = Optional.ofNullable(user);
 
-return user.map(User::getUserName)
+return userOpt.map(User::getUserName)
             .map(String::toUpperCase)
             .orElse(null);
 ```
