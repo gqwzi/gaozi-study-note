@@ -223,3 +223,106 @@ b>添加 Bean 后置处理器后 Bean 的生命周期
 6.Bean 可以使用了
 7.当容器关闭时, 调用 Bean 的销毁方法
 ```
+
+
+## 3、【AOP】
+### 3.1 【AOP前奏】
+需求1-日志：在程序执行期间追踪正在发生的活动     
+需求2-验证：希望计算器只能处理正数的运算       
+
+存在问题：   
+1、代码混乱：越来越多的非业务需求(日志和验证等)加入后, 原有的业务方法急剧膨胀.  每个方法在处理核心逻辑的同时还必须兼顾其他多个关注点.         
+2、代码分散: 以日志需求为例, 只是为了满足这个单一需求, 就不得不在多个模块（方法）里多次重复相同的日志代码. 如果日志需求发生变化, 必须修改所有模块.
+
+
+### 3.2 【AOP简介】
+> AOP(Aspect-Oriented Programming, 面向切面编程): 是一种新的方法论, 是对传统 OOP(Object-Oriented Programming, 面向对象编程) 的补充      
+> AOP 的主要编程对象是切面(aspect), 而切面模块化横切关注点.
+> 在应用 AOP 编程时, 仍然需要定义公共功能, 但可以明确的定义这个功能在哪里, 以什么方式应用, 并且不必修改受影响的类. 这样一来横切关注点就被模块化到特殊的对象(切面)里              
+> AOP 的好处:  1、每个事物逻辑位于一个位置, 代码不分散, 便于维护和升级
+2、业务模块更简洁, 只包含核心业务代码.   
+
+### 3.3 【术语】
+    切面(Aspect):  横切关注点(跨越应用程序多个模块的功能)被模块化的特殊对象
+    通知(Advice):  切面必须要完成的工作
+    目标(Target): 被通知的对象
+    代理(Proxy): 向目标对象应用通知之后创建的对象
+    连接点（Joinpoint）：程序执行的某个特定位置：如类某个方法调用前、调用后、方法抛出异常后等。连接点由两个信息确定：方法表示的程序执行点；相对点表示的方位。例如 ArithmethicCalculator#add() 方法执行前的连接点，执行点为 ArithmethicCalculator#add()； 方位为该方法执行前的位置
+    切点（pointcut）：每个类都拥有多个连接点：例如 ArithmethicCalculator 的所有方法实际上都是连接点，即连接点是程序类中客观存在的事务。AOP 通过切点定位到特定的连接点。类比：连接点相当于数据库中的记录，切点相当于查询条件。切点和连接点不是一对一的关系，一个切点匹配多个连接点，切点通过 org.springframework.aop.Pointcut 接口进行描述，它使用类和方法作为连接点的查询条件。
+
+### 3.4 【在spring中启用aspectJ注解支持】
+    1、要在 Spring 应用中使用 AspectJ 注解, 必须在 classpath 下包含 AspectJ 类库: aopalliance.jar、aspectj.weaver.jar 和 spring-aspects.jar
+    2、将 aop Schema 添加到 <beans> 根元素中.
+    3、要在 Spring IOC 容器中启用 AspectJ 注解支持, 只要在 Bean 配置文件中定义一个空的 XML 元素 <aop:aspectj-autoproxy>
+    4、当 Spring IOC 容器侦测到 Bean 配置文件中的 <aop:aspectj-autoproxy> 元素时, 会自动为与 AspectJ 切面匹配的 Bean 创建代理.
+
+### 3.5 【用 AspectJ 注解声明切面】
+    1、要在 Spring 中声明 AspectJ 切面, 只需要在 IOC 容器中将切面声明为 Bean 实例. 当在 Spring IOC 容器中初始化 AspectJ 切面之后, Spring IOC 容器就会为那些与 AspectJ 切面相匹配的 Bean 创建代理.
+    2、在 AspectJ 注解中, 切面只是一个带有 @Aspect 注解的 Java 类. 
+    3、通知是标注有某种注解的简单的 Java 方法.
+    4、AspectJ 支持 5 种类型的通知注解: 
+      @Before: 前置通知, 在方法执行之前执行
+      @After: 后置通知, 在方法执行之后执行 
+      @AfterRunning: 返回通知, 在方法返回结果之后执行
+      @AfterThrowing: 异常通知, 在方法抛出异常之后
+      @Around: 环绕通知, 围绕着方法执行
+
+
+### 3.6 【特殊说明~环绕通知】
+    1、环绕通知是所有通知类型中功能最为强大的, 能够全面地控制连接点. 甚至可以控制是否执行连接点.
+    2、对于环绕通知来说, 连接点的参数类型必须是 ProceedingJoinPoint . 它是 JoinPoint 的子接口, 允许控制何时执行, 是否执行连接点.
+    3、在环绕通知中需要明确调用 ProceedingJoinPoint 的 proceed() 方法来执行被代理的方法. 如果忘记这样做就会导致通知被执行了, 但目标方法没有被执行.
+    4、注意: 环绕通知的方法需要返回目标方法执行之后的结果, 即调用 joinPoint.proceed(); 的返回值, 否则会出现空指针异常
+
+
+### 3.7【指定切面优先级】
+    1、在同一个连接点上应用不止一个切面时, 除非明确指定, 否则它们的优先级是不确定的.
+    2、切面的优先级可以通过实现 Ordered 接口或利用 @Order 注解指定.
+    3、实现 Ordered 接口, getOrder() 方法的返回值越小, 优先级越高.
+    4、若使用 @Order 注解, 序号出现在注解中
+
+
+### 3.8 【重用切入点】
+    1、在编写 AspectJ 切面时, 可以直接在通知注解中书写切入点表达式. 但同一个切点表达式可能会在多个通知中重复出现.
+    2、在 AspectJ 切面中, 可以通过 @Pointcut 注解将一个切入点声明成简单的方法. 切入点的方法体通常是空的, 因为将切入点定义与应用程序逻辑混在一起是不合理的. 
+    3、切入点方法的访问控制符同时也控制着这个切入点的可见性. 如果切入点要在多个切面中共用, 最好将它们集中在一个公共的类中. 在这种情况下, 它们必须被声明为 public. 在引入这个切入点时, 必须将类名也包括在内. 如果类没有与这个切面放在同一个包中, 还必须包含包名.
+    4、其他通知可以通过方法名称引入该切入点.
+    
+示例代码
+```java
+@Pointout("execution(* *.*(..))")
+private void loggingOperate();
+
+@Before("loggingOperate()")
+private void before(Jointpoint joinPoint){
+    xxx
+}
+
+@AfterReturning(pointCut = "loggingOperate()",return = "result")
+private void after(Jointpoint joinPoint,Object result){
+    xxx
+}
+```
+
+### 3.9 【基于XML的配置声明切面】
+1、除了使用 AspectJ 注解声明切面, Spring 也支持在 Bean 配置文件中声明切面. 这种声明是通过 aop schema 中的 XML 元素完成的.     
+2、正常情况下, 基于注解的声明要优先于基于 XML 的声明. 通过 AspectJ 注解, 切面可以与 AspectJ 兼容, 而基于 XML 的配置则是 Spring 专有的. 由于 AspectJ 得到越来越多的 AOP 框架支持, 所以以注解风格编写的切面将会有更多重用的机会.
+
+基于XML声明切面
+
+    1、当使用 XML 声明切面时, 需要在 <beans> 根元素中导入 aop Schema
+    2、在 Bean 配置文件中, 所有的 Spring AOP 配置都必须定义在 <aop:config> 元素内部. 对于每个切面而言, 都要创建一个 <aop:aspect> 元素来为具体的切面实现引用后端 Bean 实例. 
+    3、切面 Bean 必须有一个标示符, 供 <aop:aspect> 元素引用
+
+基于XML声明切入点
+
+    1、切入点使用 <aop:pointcut> 元素声明
+    2、切入点必须定义在 <aop:aspect> 元素下, 或者直接定义在 <aop:config> 元素下.
+    3、定义在 <aop:aspect> 元素下: 只对当前切面有效
+    4、定义在 <aop:config> 元素下: 对所有切面都有效
+    5、基于 XML 的 AOP 配置不允许在切入点表达式中用名称引用其他切入点. 
+
+基于XML声明通知
+
+    在 aop Schema 中, 每种通知类型都对应一个特定的 XML 元素. 
+    通知元素需要使用 <pointcut-ref> 来引用切入点, 或用 <pointcut> 直接嵌入切入点表达式.  method 属性指定切面类中通知方法的名称.
