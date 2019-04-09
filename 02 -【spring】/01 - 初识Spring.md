@@ -379,16 +379,16 @@ NESTED                      如果有事务在运行，当前的方法就应该�
 2>在实际开发中, 为了提升性能, 事务会以较低的隔离级别运行.    
 3>事务的隔离级别可以通过隔离事务属性指定
 
-2、spring支持的事务隔离级别
+2、spring支持的事务隔离级别       
 隔离级别            描述
 DEFAULT             
 READ_UNCOMMITED
 READ_COMMITED
 REPEATABLE_READ 
-SERIALIZABLE
-额外
-1>事务的隔离级别要得到底层数据库引擎的支持, 而不是应用程序或者框架的支持. 
-2>Oracle 支持的 2 种事务隔离级别：READ_COMMITED , SERIALIZABLE
+SERIALIZABLE        
+额外      
+1>事务的隔离级别要得到底层数据库引擎的支持, 而不是应用程序或者框架的支持.      
+2>Oracle 支持的 2 种事务隔离级别：READ_COMMITED , SERIALIZABLE     
   Mysql 支持 4 中事务隔离级别.
 
 
