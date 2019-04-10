@@ -179,9 +179,15 @@ g>使用 p 命名空间
 > （a）在 Spring 中, 可以在 <bean> 元素的 scope 属性里设置 Bean 的作用域.              
 （b）默认情况下, Spring 只为每个在 IOC 容器里声明的 Bean 创建唯一一个实例, 整个 IOC 容器范围内都能共享该实例：所有后续的 getBean() 调用和 Bean 引用都将返回这个唯一的 Bean 实例.该作用域被称为 singleton, 它是所有 Bean 的默认作用域.
 
-类别                                         说明      
-------图链接-----
-                  
+类别|说明       
+---|---  
+singleton|单例模式，在整个Spring IoC容器中，使用singleton定义的Bean将只有一个实例 
+prototype|原型模式，每次通过容器的getBean方法获取prototype定义的Bean时，都将产生一个新的Bean实例,执行new xxxBean()
+request|对于每次HTTP请求，使用request定义的Bean都将产生一个新实例，即每次HTTP请求将会产生不同的Bean实例。只有在Web应用中使用Spring时，该作用域才有效
+session|对于每次HTTP Session，使用session定义的Bean都将产生一个新实例。同一个Http session共享一个bean。同样只有在Web应用中使用Spring时，该作用域才有效 
+globalsession|每个全局的HTTP Session，使用session定义的Bean都将产生一个新实例。一般用于portlet应用环境。同样只有在Web应用中使用Spring时，该作用域才有效
+
+<a href = "http://www.importnew.com/20736.html">详细：Spring容器中Bean的作用域</a>                  
 ### 2.8 【使用外部属性文件】
 1. 在配置文件里配置 Bean 时, 有时需要在 Bean 的配置里混入系统部署的细节信息(例如: 文件路径,
    数据源配置信息等). 而这些部署细节实际上需要和 Bean 配置相分离        
@@ -364,14 +370,17 @@ private void after(Jointpoint joinPoint,Object result){
 ### 4.6、【事务的传播属性】
 1、简介：当事务方法被另一个事务方法调用时, 必须指定事务应该如何传播. 例如: 方法可能继续在现有事务中运行, 也可能开启一个新事务, 并在自己的事务中运行.    
 2、sping支持的7种事务传播行为
-传播属性                    描述
-REQUIRED                    如果存在一个事务，则支持当前事务。如果没有事务则开启一个新的事务。 
-REQUIRES_NEW                如果一个事务已经存在，则先将这个存在的事务挂起。 它会开启一个新的事务  
-SUPPORTS                    如果存在一个事务，支持当前事务。如果没有事务，则非事务的执行。但是对于事务同步的事务管理器，PROPAGATION_SUPPORTS与不使用事务有少许不同。 
-NOT_SUPPORTED               当前的方法不应该运行在事务中。如果有运行的事务，则将它挂起
-MANDATORY                   当前的方法必须运行在事务内部，如果没有正在运行的事务，则跑出异常
-NEVER                       当前的方法不应该运行在事务中，如果有运行的事务，则抛出异常
-NESTED                      如果有事务在运行，当前的方法就应该在这个事务的嵌套事务内运行，否则，就启动一个新事务，并在它自己的事务内运行。
+
+传播属性|描述
+---|---
+REQUIRED|如果存在一个事务，则支持当前事务。如果没有事务则开启一个新的事务。
+REQUIRES_NEW|如果一个事务已经存在，则先将这个存在的事务挂起。 它会开启一个新的事务
+SUPPORTS|如果存在一个事务，支持当前事务。如果没有事务，则非事务的执行。但是对于事务同步的事务管理器，PROPAGATION_SUPPORTS与不使用事务有少许不同。
+NOT_SUPPORTED|当前的方法不应该运行在事务中。如果有运行的事务，则将它挂起
+MANDATORY|当前的方法必须运行在事务内部，如果没有正在运行的事务，则跑出异常
+NEVER|当前的方法不应该运行在事务中，如果有运行的事务，则抛出异常
+NESTED|如果有事务在运行，当前的方法就应该在这个事务的嵌套事务内运行，否则，就启动一个新事务，并在它自己的事务内运行。
+---   
 
 ### 4.7、【事务的隔离级别】
 1、简介    
@@ -380,13 +389,15 @@ NESTED                      如果有事务在运行，当前的方法就应该�
 3>事务的隔离级别可以通过隔离事务属性指定
 
 2、spring支持的事务隔离级别       
-隔离级别            描述
-DEFAULT             
-READ_UNCOMMITED
-READ_COMMITED
-REPEATABLE_READ 
-SERIALIZABLE        
-额外      
+
+隔离级别|描述
+---|---
+DEFAULT|使用后端数据库默认的隔离级别。               
+READ_UNCOMMITED|也称为脏读，就是一个事务可以读取另一个事务未提交的内容
+READ_COMMITED|也称为不可重复读，就是不同的事务重复读了一条记录会出问题。一个事务只可以读取另一个事务提交的内容
+REPEATABLE_READ| 个事务在读取了记录之后，这条记录不能再被修改,也就是把这一行记录给锁住，不在允许其它的事物染指此行记录。
+SERIALIZABLE| 个事务必须等待另一个事务执行完成再可以执行。
+（额外）      
 1>事务的隔离级别要得到底层数据库引擎的支持, 而不是应用程序或者框架的支持.      
 2>Oracle 支持的 2 种事务隔离级别：READ_COMMITED , SERIALIZABLE     
   Mysql 支持 4 中事务隔离级别.
