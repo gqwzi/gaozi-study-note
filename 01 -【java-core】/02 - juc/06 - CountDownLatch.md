@@ -189,7 +189,7 @@ checking 服务：newWork---start
 ```
 
 ### 【05 - 常见面试题】
-1、解释一下CountDownLatch概念？
-2、CountDownLatch 和CyclicBarrier的不同之处?
-3、给出一些CountDownLatch使用的例子?
+1、解释一下CountDownLatch概念？     
+2、CountDownLatch 和CyclicBarrier的不同之处?       
+3、给出一些CountDownLatch使用的例子?      
 4、 CountDownLatch 类中主要的方法?
