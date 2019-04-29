@@ -87,7 +87,7 @@ public interface RunnableFuture<V> extends Runnable, Future<V> {
     void run();
 }
 ```
- ![image](https://github.com/gqwzi/gaozi-study-note/blob/master/99%20-%20%E3%80%90img%E3%80%91/callable/01-callable-20190429.png)
+ ![image](https://github.com/gqwzi/gaozi-study-note/blob/master/99%20-%20%E3%80%90img%E3%80%91/callable/01-callable-20190429.png)       
 可以看出RunnableFuture继承了Runnable接口和Future接口，而FutureTask实现了RunnableFuture接口。所以它既可以作为Runnable被线程执行，又可以作为Future得到Callable的返回值。        
 FutureTask提供了2个构造器：
 ```
