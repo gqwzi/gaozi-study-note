@@ -193,3 +193,5 @@ checking 服务：newWork---start
 2、CountDownLatch 和CyclicBarrier的不同之处?       
 3、给出一些CountDownLatch使用的例子?      
 4、 CountDownLatch 类中主要的方法?
+
+参考<a href="http://www.importnew.com/15731.html">原文</a>
