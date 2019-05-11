@@ -42,3 +42,52 @@ public interface ReadWriteLock {
 ```
 
 ### 【5 - 使用示例】
+```java
+public class TestReadWriteLock {
+    public static void main(String[] args) {
+        ReadWriteLockDemo rw = new ReadWriteLockDemo();
+        //写
+        new Thread(new Runnable(){
+            public void run(){
+                rw.set((int)(Math.random()*101));
+            }
+        },"write thread").start();
+
+        //读
+        for (int i =0;i<20;i++){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    rw.get();
+                }
+            },"read thread").start();
+        }
+    }
+
+}
+
+class ReadWriteLockDemo{
+
+    private int number = 0;
+
+    ReadWriteLock lock = new ReentrantReadWriteLock();
+
+    public  void get(){
+        try {
+            lock.readLock().lock();
+            System.out.println("current thread name " + Thread.currentThread().getName() + "【number】" + number);
+        }finally {
+            lock.readLock().unlock();
+        }
+    }
+    public void set(int number){
+        try {
+            lock.writeLock().lock();
+            System.out.println("current thread name:" + Thread.currentThread().getName());
+            this.number = number;
+        }finally {
+            lock.writeLock().unlock();
+        }
+    }
+}
+```
