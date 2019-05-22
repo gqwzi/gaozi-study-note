@@ -166,5 +166,21 @@ boolean test<T t>
         People p = sup.get();
         //------
         Supplier<People> sup2 = People::new;
-        People p2 = sup2.get();        
+        People p2 = sup2.get();
+     
+3、类名 :: 实例方法名
+        BiPredicate<String, String> bp = (x, y) -> x.equals(y);
+        System.out.println(bp.test("abcde", "abcde"));       
+        System.out.println("-----------------------------------------");
+        
+        BiPredicate<String, String> bp2 = String::equals;
+        System.out.println(bp2.test("abc", "abc")); 
+        System.out.println("-----------------------------------------");
+        
+		Function<Employee, String> fun = (e) -> e.show();
+		System.out.println(fun.apply(new Employee()));
+		System.out.println("-----------------------------------------");
+		
+        Function<Employee, String> fun2 = Employee::show;
+        System.out.println(fun2.apply(new Employee()));
 ```
