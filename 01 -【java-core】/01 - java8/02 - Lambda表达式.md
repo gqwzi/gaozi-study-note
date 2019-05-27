@@ -183,4 +183,54 @@ boolean test<T t>
 		
         Function<Employee, String> fun2 = Employee::show;
         System.out.println(fun2.apply(new Employee()));
+        
+4、类名 :: 静态方法名
+	@Test
+	public void test4(){
+		Comparator<Integer> com = (x, y) -> Integer.compare(x, y);
+		
+		System.out.println("-------------------------------------");
+		
+		Comparator<Integer> com2 = Integer::compare;
+	}
+	
+	@Test
+	public void test3(){
+		BiFunction<Double, Double, Double> fun = (x, y) -> Math.max(x, y);
+		System.out.println(fun.apply(1.5, 22.2));
+		
+		System.out.println("--------------------------------------------------");
+		
+		BiFunction<Double, Double, Double> fun2 = Math::max;
+		System.out.println(fun2.apply(1.2, 1.5));
+	}
+
+	
+5、对象的引用 :: 实例方法名
+  	@Test
+  	public void test2(){
+  		Employee emp = new Employee(101, "张三", 18, 9999.99);
+  		
+  		Supplier<String> sup = () -> emp.getName();
+  		System.out.println(sup.get());
+  		
+  		System.out.println("----------------------------------");
+  		
+  		Supplier<String> sup2 = emp::getName;
+  		System.out.println(sup2.get());
+  	}
+  	
+  	@Test
+  	public void test1(){
+  		PrintStream ps = System.out;
+  		Consumer<String> con = (str) -> ps.println(str);
+  		con.accept("Hello World！");
+  		
+  		System.out.println("--------------------------------");
+  		
+  		Consumer<String> con2 = ps::println;
+  		con2.accept("Hello Java8！");
+  		
+  		Consumer<String> con3 = System.out::println;
+  	}	        
 ```
