@@ -133,11 +133,72 @@ collect(Collector c)  | 将流转换为其他形式。接收一个 Collector接�
 toList  | List<T>   | 把流中元素收集到List 
 List<Employee> emps= list.stream().collect(Collectors.toList());   
         
--------- | ---   |  ---    
+方法     | 返回类型     | 作用   
+-------- | ---   |  ---  
 toSet |  Set<T>     | 把流中元素收集到Set  
 Set<Employee> emps= list.stream().collect(Collectors.toSet());  
 
 
--------- | ---     | 
+方法     | 返回类型     | 作用   
+-------- | ---   |  ---  
+toCollection  | Collection<T>   |  把流中元素收集到创建的集合 
+Collection<Employee>emps=list.stream().collect(Collectors.toCollection(ArrayList::new)); 
 
-   
+方法     | 返回类型     | 作用   
+-------- | ---   |  ---  
+counting   | Long    |  计算流中元素的个数
+long count = list.stream().collect(Collectors.counting());  
+  
+方法     | 返回类型     | 作用   
+-------- | ---   |  ---     
+summingInt  | Integer    |  对流中元素的整数属性求和
+inttotal=list.stream().collect(Collectors.summingInt(Employee::getSalary));     
+
+方法     | 返回类型     | 作用   
+-------- | ---   |  ---     
+averagingInt  | Double    |  计算流中元素Integer属性的平均 值 
+doubleavg= list.stream().collect(Collectors.averagingInt(Employee::getSalary));     
+
+方法     | 返回类型     | 作用   
+-------- | ---   |  ---     
+summarizingInt  | IntSummaryStatistics   |  收集流中Integer属性的统计值。 如：平均值      
+IntSummaryStatisticsiss= list.stream().collect(Collectors.summarizingInt(Employee::getSalary));
+
+方法     | 返回类型     | 作用   
+-------- | ---   |  ---     
+joining  | String   | 连接流中每个字符串 
+String str= list.stream().map(Employee::getName).collect(Collectors.joining());     
+
+方法     | 返回类型     | 作用   
+-------- | ---   |  ---     
+maxBy  | Optional<T>   |  根据比较器选择最大值
+Optional<Emp>max= list.stream().collect(Collectors.maxBy(comparingInt(Employee::getSalary)));     
+
+方法     | 返回类型     | 作用   
+-------- | ---   |  ---     
+minBy  | Optional<T>   |  根据比较器选择最大值
+Optional<Emp>min= list.stream().collect(Collectors.minBy(comparingInt(Employee::getSalary))); 
+
+方法     | 返回类型     | 作用   
+-------- | ---   |  ---     
+reducing  | 规约产生的类型   |  从一个作为累加器的初始值 开始，利用BinaryOperator与 流中元素逐个结合，从而归 约成单个值      
+inttotal=list.stream().collect(Collectors.reducing(0, Employee::getSalar, Integer::sum));
+
+
+方法     | 返回类型     | 作用   
+-------- | ---   |  ---     
+collectingAndThen  | 转换函数返回的类型    |  包裹另一个收集器，对其结 果转换函数 
+inthow= list.stream().collect(Collectors.collectingAndThen(Collectors.toList(), List::size));      
+
+方法     | 返回类型     | 作用   
+-------- | ---   |  ---     
+groupingBy  | Map<K, List<T>>   |  根据某属性值对流分组，属 性为K，结果为V 
+Map<Emp.Status, List<Emp>> map= list.stream() .collect(Collectors.groupingBy(Employee::getStatus));      
+
+方法     | 返回类型     | 作用   
+-------- | ---   |  ---     
+partitioningBy  | Map<Boolean, List<T>>    |  根据true或false进行分区 
+Map<Boolean,List<Emp>>vd= list.stream().collect(Collectors.partitioningBy(Employee::getManage));
+
+
+     
