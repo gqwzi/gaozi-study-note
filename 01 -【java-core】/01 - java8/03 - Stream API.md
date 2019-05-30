@@ -89,3 +89,55 @@ sorted(Comparator comp)   |  产生一个新流，其中按比较器顺序排序
 
 
 ## 【2.3 - Stream的终止操作】
+> 终端操作会从流的流水线生成结果。其结果可以是任何不是流的值，例如：List、Integer，甚至是 void  
+
+【2.3.1 查找与匹配】     
+   
+方法     | 描述 
+-------- | ---
+sorted()  | 产生一个新流，其中按自然顺序排序  
+allMatch(Predicate p)  | 检查是否匹配所有元素        
+anyMatch(Predicate p)   | 检查是否至少匹配一个元素        
+noneMatch(Predicate p)   | 检查是否没有匹配所有元素      
+findFirst()   | 返回第一个元素        
+findAny()   | 返回当前流中的任意元素
+count()    | 返回流中元素总数
+max(Comparator c)    |  返回流中最大值
+min(Comparator c)    | 返回流中最小值
+forEach(Consumer c)    | 内部迭代(使用 Collection 接口需要用户去做迭代，称为外部迭代。相反，Stream API 使用内部 迭代——它帮你把迭代做了)
+
+
+【2.3.2 规约】      
+  
+方法     | 描述 
+-------- | ---  
+reduce(T iden, BinaryOperator b)  | 可以将流中元素反复结合起来，得到一个值。 返回 T 
+reduce(BinaryOperator b)  | 可以将流中元素反复结合起来，得到一个值。 返回 Optional<T> 
+>备注：map 和 reduce 的连接通常称为 map-reduce 模式，因 Google 用它 来进行网络搜索而出名。
+
+
+
+【2.3.3 收集】   
+  
+方法     | 描述 
+-------- | ---  
+collect(Collector c)  | 将流转换为其他形式。接收一个 Collector接口的 实现，用于给Stream中元素做汇总的方法  
+
+>Collector 接口中方法的实现决定了如何对流执行收集操作(如收
+   集到 List、Set、Map)。但是 Collectors 实用类提供了很多静态
+   方法，可以方便地创建常见收集器实例，具体方法与实例如下表： 
+
+
+方法     | 返回类型     | 作用      
+-------- | ---   |  --- 
+toList  | List<T>   | 把流中元素收集到List 
+List<Employee> emps= list.stream().collect(Collectors.toList());   
+        
+-------- | ---   |  ---    
+toSet |  Set<T>     | 把流中元素收集到Set  
+Set<Employee> emps= list.stream().collect(Collectors.toSet());  
+
+
+-------- | ---     | 
+
+   
