@@ -74,8 +74,6 @@ $cowsay -f tux "坑爹啊"
 $fortune | cowsay
 ```
 
-
-img
 4. cmatrix 命令
 
 这个很酷！《黑客帝国》那种矩阵风格的动画效果
