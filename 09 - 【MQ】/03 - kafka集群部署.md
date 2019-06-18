@@ -81,3 +81,38 @@ http://kafka.apache.org/downloads.html
         [gaozi@hadoop103 kafka]$ bin/kafka-server-stop.sh stop
         [gaozi@hadoop104 kafka]$ bin/kafka-server-stop.sh stop
 
+#### 【2.3】kafka命令行操作
+
+1、查看当前服务器中所有的topic
+        
+        [gaozi@hadoop102 kafka]$ bin/kafka-topics.sh --zookeeper hadoop102:2181 --list
+        
+2、创建topic
+        
+        [gaozi@hadoop102 kafka]$ bin/kafka-topics.sh --zookeeper hadoop102:2181 \
+        --create --replication-factor 3 --partitions 1 --topic first
+        选项说明：
+        --topic 定义topic名
+        --replication-factor  定义副本数
+        --partitions  定义分区数
+
+3、删除topic
+        
+        [gaozi@hadoop102 kafka]$ bin/kafka-topics.sh --zookeeper hadoop102:2181 \
+        --delete --topic first
+        需要server.properties中设置delete.topic.enable=true否则只是标记删除或者直接重启。
+4、发送消息
+        
+        [gaozi@hadoop102 kafka]$ bin/kafka-console-producer.sh \
+        --broker-list hadoop102:9092 --topic first
+        >hello world
+        >atguigu  atguigu
+5、消费消息
+        
+        [gaozi@hadoop103 kafka]$ bin/kafka-console-consumer.sh \
+        --zookeeper hadoop102:2181 --from-beginning --topic first
+        --from-beginning：会把first主题中以往所有的数据都读取出来。根据业务场景选择是否增加该配置。
+6、查看某个Topic的详情
+        
+        [gaozi@hadoop102 kafka]$ bin/kafka-topics.sh --zookeeper hadoop102:2181 \
+        --describe --topic first
