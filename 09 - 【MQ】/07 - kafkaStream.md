@@ -37,13 +37,135 @@ Stream提供的是一个基于Kafka的流式处理类库。框架要求开发者
 
 - 第三，就流式处理系统而言，基本都支持Kafka作为数据源。例如Storm具有专门的kafka-spout，而Spark也提供专门的spark-streaming-kafka模块。事实上，Kafka基本上是主流的流式处理系统的标准数据源。换言之，大部分流式系统中都已部署了Kafka，此时使用Kafka Stream的成本非常低。  
 
+- 第四，使用Storm或Spark Streaming时，需要为框架本身的进程预留资源，如Storm的supervisor和Spark on YARN的node manager。即使对于应用实例而言，框架本身也会占用部分资源，如Spark Streaming需要为shuffle和storage预留内存。但是Kafka作为类库不占用系统资源。
 
+- 第五，由于Kafka本身提供数据持久化，因此Kafka Stream提供滚动部署和滚动升级以及重新计算的能力。
 
+- 第六，由于Kafka Consumer Rebalance机制，Kafka Stream可以在线动态调整并行度。  
 
+### 【6.2 数据清洗案例】
+0）需求：       
+	实时处理单词带有”>>>”前缀的内容。例如输入”gaozi>>>ximenqing”，最终处理成“ximenqing”
 
+1）需求分析：     
+![](../99-【img】/MQ/13-kafka-stream.png)
 
+2）案例实操:     
 
+（1）创建一个工程，并添加jar包
+（2）创建主类
 
+```java
+package com.gaozi.kafka.stream;
+import java.util.Properties;
+import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.processor.Processor;
+import org.apache.kafka.streams.processor.ProcessorSupplier;
+import org.apache.kafka.streams.processor.TopologyBuilder;
+
+public class Application {
+
+	public static void main(String[] args) {
+
+		// 定义输入的topic
+        String from = "first";
+        // 定义输出的topic
+        String to = "second";
+
+        // 设置参数
+        Properties settings = new Properties();
+        settings.put(StreamsConfig.APPLICATION_ID_CONFIG, "logFilter");
+        settings.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "hadoop102:9092");
+
+        StreamsConfig config = new StreamsConfig(settings);
+
+        // 构建拓扑
+        TopologyBuilder builder = new TopologyBuilder();
+
+        builder.addSource("SOURCE", from)
+               .addProcessor("PROCESS", new ProcessorSupplier<byte[], byte[]>() {
+
+					@Override
+					public Processor<byte[], byte[]> get() {
+						// 具体分析处理
+						return new LogProcessor();
+					}
+				}, "SOURCE")
+                .addSink("SINK", to, "PROCESS");
+
+        // 创建kafka stream
+        KafkaStreams streams = new KafkaStreams(builder, config);
+        streams.start();
+	}
+}
+
+```
+(3)具体业务处理
+```java
+package com.gaozi.kafka.stream;
+import org.apache.kafka.streams.processor.Processor;
+import org.apache.kafka.streams.processor.ProcessorContext;
+
+public class LogProcessor implements Processor<byte[], byte[]> {
+	
+	private ProcessorContext context;
+	
+	@Override
+	public void init(ProcessorContext context) {
+		this.context = context;
+	}
+
+	@Override
+	public void process(byte[] key, byte[] value) {
+		String input = new String(value);
+		
+		// 如果包含“>>>”则只保留该标记后面的内容
+		if (input.contains(">>>")) {
+			input = input.split(">>>")[1].trim();
+			// 输出到下一个topic
+			context.forward("logProcessor".getBytes(), input.getBytes());
+		}else{
+			context.forward("logProcessor".getBytes(), input.getBytes());
+		}
+	}
+
+	@Override
+	public void punctuate(long timestamp) {
+		
+	}
+
+	@Override
+	public void close() {
+		
+	}
+}
+
+```
+
+（4）运行程序
+
+（5）在hadoop104上启动生产者
+```
+[gaozi@hadoop104 kafka]$ bin/kafka-console-producer.sh \
+--broker-list hadoop102:9092 --topic first
+
+>hello>>>world
+>h>>>gaozi
+>hahaha
+
+```
+
+（6）在hadoop103上启动消费者
+```
+[gaozi@hadoop103 kafka]$ bin/kafka-console-consumer.sh \
+--zookeeper hadoop102:2181 --from-beginning --topic second
+
+world
+gaozi
+hahaha
+
+```
 
 
 
