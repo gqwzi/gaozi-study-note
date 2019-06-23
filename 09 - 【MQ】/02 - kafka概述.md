@@ -2,7 +2,7 @@
 
 ## 【1】消息队列
 - 消息队列内部实现原理
-![](../99-【img】\MQ\02-kafka-yuanli.png "Optional title")   
+![](../99-【img】/MQ/02-kafka-yuanli.png "Optional title")   
 
 
 - 消息队列分为2种类型：     
@@ -42,10 +42,10 @@
 
 ### 【4】kafka架构
 - kafka整体架构图
-![](../99-【img】\MQ\03-kafka-zhengti.png "Optional title")     
+![](../99-【img】/MQ/03-kafka-zhengti.png "Optional title")     
 
 - kafka详细架构图
-![](../99-【img】\MQ\04-kafka-detail.png "Optional title")     
+![](../99-【img】/MQ/04-kafka-detail.png "Optional title")     
 1）Producer ：消息生产者，就是向kafka broker发消息的客户端；       
 2）Consumer ：消息消费者，向kafka broker取消息的客户端；     
 3）Topic ：可以理解为一个队列；     

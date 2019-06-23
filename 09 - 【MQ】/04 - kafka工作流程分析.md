@@ -21,7 +21,7 @@ kafka核心组成
 1. 指定了patition，则直接使用；
 2. 未指定patition但指定key，通过对key的value进行hash出一个patition；
 3. patition和key都未指定，使用轮询选出一个patition。
-```
+``` java
 DefaultPartitioner类
 publicint partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
         List<PartitionInfo> partitions = cluster.partitionsForTopic(topic);

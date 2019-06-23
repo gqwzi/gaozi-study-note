@@ -10,5 +10,5 @@
 >每新写一条消息，Kafka 就是在对应的文件 append 写，所以性能非常高。
 
 Kafka 的总体数据流是这样的：
-![](../99-【img】\MQ\01-kafka.png "Optional title")   
+![](../99-【img】/MQ/01-kafka.png "Optional title")   
 
