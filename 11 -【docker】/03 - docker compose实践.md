@@ -35,9 +35,6 @@ ENTRYPOINT ["java","-jar","/app.jar"]
 ### 2、spring-hello工程        
 1>helloController
 ```
-/*
- * Copyright (C) 2019 VIPKID, Inc. All Rights Reserved.
- */
 package com.gaoqiangwei.springhello.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
