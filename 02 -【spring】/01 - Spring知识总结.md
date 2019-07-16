@@ -17,7 +17,7 @@
 ### 2.2 【配置bean】
 #### 2.2.1 【配置形式】
 1、基于XML形式的方式        
-```java
+```
 <bean id = "helloWorld"  class = "com.gaoqiangwei.spring.helloWorld">
 </bean>
 
@@ -64,7 +64,7 @@ FileSystemXmlApplicationContext：从文件系统中加载配置文件
 3、工厂方法注入（很少使用，不推荐）
 ```
 1、属性注入     
-```java
+```
 <bean id = "helloWorld" class = "com.gaoqiangwei.spring.helloWorld">
     <property name = "userName" value = "gaozi" />
 </bean>
@@ -107,12 +107,12 @@ c>内部 Bean``
 2. 内部 Bean 不能使用在任何其他地方
 ````        
 d>注入参数详解：null 值和级联属性        
-```java
+```
 1. 可以使用专用的 <null/> 元素标签为 Bean 的字符串或其它对象类型的属性注入 null 值      
 2. 和 Struts、Hiberante 等框架一样，Spring 支持级联属性的配置。      
 ```
 e>集合属性
-```java
+```
 1. 在 Spring中可以通过一组内置的 xml 标签(例如: <list>, <set> 或 <map>) 来配置集合属性.
 2. 配置 java.util.List 类型的属性, 需要指定 <list>  标签, 在标签里包含一些元素. 这些标签可以通过 <value> 指定简单的常量值, 通过 <ref> 指定对其他 Bean 的引用. 通过<bean> 指定内置 Bean 定义. 通过 <null/> 指定空元素. 甚至可以内嵌其他集合.
 3. 数组的定义和 List 一样, 都使用 <list>
@@ -124,19 +124,19 @@ e>集合属性
 8. 使用 <props> 定义 java.util.Properties, 该标签使用多个 <prop> 作为子标签. 每个 <prop> 标签必须定义 key 属性. 
 ```
 f>使用 utility scheme 定义集合        
-```java
+```
 1.使用基本的集合标签定义集合时, 不能将集合作为独立的 Bean 定义, 导致其他 Bean 无法引用该集合, 所以无法在不同 Bean 之间共享集合.       
 2.可以使用 util schema 里的集合标签定义独立的集合 Bean. 需要注意的是, 必须在 <beans> 根元素里添加 util schema 定义
 ```     
 g>使用 p 命名空间
-```java
+```
 1. 为了简化 XML 文件的配置，越来越多的 XML 文件采用属性而非子元素配置信息。     
 2. Spring 从 2.5 版本开始引入了一个新的 p 命名空间，可以通过 <bean> 元素属性的方式配置 Bean 的属性。
 3. 使用 p 命名空间后，基于 XML 的配置方式将进一步简化        
 ```     
 
 ### 2.5 【自动装配】
-```java
+```
 1、byType (根据类型自动装配)
 2、byName(根据名称自动装配)
 3、constructor(通过构造器自动装配)（不推荐）
@@ -148,7 +148,7 @@ g>使用 p 命名空间
 3、constructor(通过构造器自动装配): 当 Bean 中存在多个构造器时, 此种自动装配方式将会很复杂. 不推荐使用    
 
 [备注]  XML 配置里的 Bean 自动装配的缺点
-```java
+```
 1. 在 Bean 配置文件里设置 autowire 属性进行自动装配将会装配 Bean 的所有属性. 然而, 若只希望装配个别属性时, autowire 属性就不够灵活了. 
 2. autowire 属性要么根据类型自动装配, 要么根据名称自动装配, 不能两者兼而有之.
 3. 一般情况下，在实际的项目中很少使用自动装配功能，因为和自动装配功能所带来的好处比起来，明确清晰的配置文档更有说服力一些
@@ -156,12 +156,12 @@ g>使用 p 命名空间
 ```
 
 ### 2.6 【bean之间的关系】
-```java
+```
 1、继承 Bean 配置
 2、依赖 Bean 配置
 ```
 1、继承 Bean 配置        
-```java
+```
 1. Spring 允许继承 bean 的配置, 被继承的 bean 称为父 bean. 继承这个父 Bean 的 Bean 称为子 Bean
 2. 子 Bean 从父 Bean 中继承配置, 包括 Bean 的属性配置
 3. 子 Bean 也可以覆盖从父 Bean 继承过来的配置
@@ -170,7 +170,7 @@ g>使用 p 命名空间
 6. 也可以忽略父 Bean 的 class 属性, 让子 Bean 指定自己的类, 而共享相同的属性配置. 但此时 abstract 必须设为 true
 ```
 2、依赖 Bean 配置
-```java
+```
 1. Spring 允许用户通过 depends-on 属性设定 Bean 前置依赖的Bean，前置依赖的 Bean 会在本 Bean 实例化之前创建好
 2. 如果前置依赖于多个 Bean，则可以通过逗号，空格或的方式配置 Bean 的名称
 ```
@@ -196,7 +196,7 @@ globalsession|每个全局的HTTP Session，使用session定义的Bean都将产�
    这个处理器允许用户将 Bean 配置的部分内容外移到属性文件中. 可以在 Bean 配置文件里使用形式为 ${var} 的变量, PropertyPlaceholderConfigurer 从属性文件里加载属性, 并使用这些属性来替换变量.     
 
 3. Spring 还允许在属性文件中使用 ${propName}，以实现属性之间的相互引用。
-```java
+```
 <context:porperty-placeholder 
    location = "classpath:db.properties"/>
 ```
@@ -204,7 +204,7 @@ globalsession|每个全局的HTTP Session，使用session定义的Bean都将产�
 ### 2.8 【IOC容器中bean的生命周期】       
 1、 Spring IOC 容器可以管理 Bean 的生命周期, Spring 允许在 Bean 生命周期的特定点执行定制的任务.       
 2、Spring IOC 容器对 Bean 的生命周期进行管理的过程:
-```java
+```
 1. 通过构造器或工厂方法创建 Bean 实例
 2. 为 Bean 的属性设置值和对其他 Bean 的引用
 3. 调用 Bean 的初始化方法
@@ -220,7 +220,7 @@ a>创建 Bean 后置处理器
 3、对Bean 后置处理器而言, 需要实现BeanPostProcesser接口. 在初始化方法被调用前后, Spring 将把每个 Bean 实例分别传递给上述接口的以下两个方法:
 
 b>添加 Bean 后置处理器后 Bean 的生命周期 
-```java
+```
 1.通过构造器或工厂方法创建 Bean 实例
 2.为 Bean 的属性设置值和对其他 Bean 的引用
 3.将 Bean 实例传递给 Bean 后置处理器的 postProcessBeforeInitialization 方法
@@ -295,7 +295,7 @@ b>添加 Bean 后置处理器后 Bean 的生命周期
     4、其他通知可以通过方法名称引入该切入点.
     
 示例代码
-```java
+```
 @Pointout("execution(* *.*(..))")
 private void loggingOperate();
 
