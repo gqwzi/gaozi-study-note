@@ -11,5 +11,18 @@ git config user.email bbb
 git config --global user.name aaa
 git config --global user.email bbb
 
+
 【备注】解决contributions不显示小绿块的问题
 （幸幸苦苦提交的代码没有贡献度,让我等非大佬的人连这点成就感都没法表现,气晕了要哈哈）
+
+
+-------解决公司和个人的问题------
+#配置用户名（只对当前仓库生效）
+git config user.name "your domain name"
+#配置邮箱（只对当前仓库生效）
+git config user.email "your email"
+
+#配置用户名（全局生效）
+git config --global user.name "your domain name"
+#配置邮箱（全局生效）
+git config --global user.email "your email"
