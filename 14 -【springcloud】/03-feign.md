@@ -158,3 +158,66 @@ Hibernate: select user0_.id as id1_0_0_, user0_.age as age2_0_0_, user0_.balance
 - RequestTemplate生成Request，然后将Request交给client处理，这个client默认是JDK的HTTPUrlConnection，也可以是OKhttp、Apache的HTTPClient等。
 - 最后client封装成LoadBaLanceClient，结合ribbon负载均衡地发起调用。
 
+### 【feign添加拦截器添加请求头信息】
+1.实现RequestInterceptor接口
+```java
+public class FeignRequestInterceptor implements RequestInterceptor {
+  @Override
+  public void apply(RequestTemplate requestTemplate) {
+    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
+            .getRequestAttributes();
+    HttpServletRequest request = attributes.getRequest();
+    Enumeration<String> headerNames = request.getHeaderNames();
+    if (headerNames != null) {
+      while (headerNames.hasMoreElements()) {
+        String name = headerNames.nextElement();
+        String values = request.getHeader(name);
+        requestTemplate.header(name, values);
+      }
+    }
+  }
+}
+```
+2.创建全局配置类
+```text
+@Configuration
+public class FeignInterceptorConfig {
+  /**
+   * feign请求拦截器
+   */
+  @Bean
+  public RequestInterceptor requestInterceptor(){
+    return new FeignRequestInterceptor();
+  }
+}
+```
+
+### 【feign配置日志】
+```text
+在默认情况下，不会记录接口的日志，如果需要了解接口的调用情况，可以使用 logLevel 方法进行配置日志级别：
+
+NONE：默认值，不进行日志记录
+BASIC：记录请求方法、URL、响应状态代码和执行时间
+HEADERS：除了 BASIC 记录的信息外，还包括请求头和响应头
+FULL：记录全部日志，包括请求头、请求体、请求与响应的元数据
+```
+```text
+/**
+ * <pre>
+ *   feign 请求日志查看配置
+ * </pre>
+ */
+@Configuration
+public class FeignConfig {
+
+    /**
+     * 打印请求日志
+     * @return
+     */
+    @Bean
+    public feign.Logger.Level multipartLoggerLevel() {
+        return Logger.Level.NONE;
+    }
+
+}
+```
